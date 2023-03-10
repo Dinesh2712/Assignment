@@ -1,0 +1,106 @@
+
+
+#assessment
+create database assignment
+show databases
+use assignment
+
+#drop table students
+
+create table students
+(Id varchar(20)not null,
+first_name varchar (25),
+primary key (Id)
+);
+select * from students
+
+create table papers
+(Title varchar(50),
+grade varchar (5),
+student_id varchar(20) not null
+);
+#drop table papers
+
+
+INSERT INTO students VALUES
+(1, 'Caleb'), (2,'Samantha'), (3,'Raj'), (4,'Carlos'), (5,'Lisa')
+
+select * from students
+
+INSERT INTO papers (student_id, title, grade ) VALUES
+(1, 'My First Book Report', 60),
+(1, 'My Second Book Report', 75),
+(2, 'Russian Lit Through The Ages', 94),
+(2, 'De Montaigne and The Art of The Essay', 98),
+(4, 'Borges and Magical Realism', 89);
+
+select * from papers
+
+#1
+select a.first_name, b.title, b.grade 
+from students a inner join papers b 
+on a.Id = b.student_id
+order by (grade) desc
+
+
+#2
+
+select a.Id, a.first_name, b.title, b.grade
+from students a left join papers b
+on a.id = b.student_id
+
+
+#3
+CREATE TABLE mytable3 AS
+(select a.Id, a.first_name, b.title, b.grade
+from students a left join papers b
+on a.id = b.student_id);
+(SELECT IFNULL(title, 'missing') 
+FROM mytable3);
+
+select * from mytable3
+
+SELECT 
+    CASE 
+        WHEN title IS NULL THEN 'missing'
+        ELSE title 
+    END AS Result
+FROM mytable3;
+
+
+SET SQL_SAFE_UPDATES = 0;
+
+
+
+
+#4
+
+
+select t1.id, t1.first_name, AVG(t2.grade) as Average
+from students t1 left outer join papers t2
+on t1.id = t2.student_id
+group by t1.id
+order by average desc
+
+
+#5
+
+
+Create table mytable4 as 
+select t1.id, t1.first_name, AVG(t2.grade) as Average
+from students t1 left outer join papers t2
+on t1.id = t2.student_id
+group by t1.id
+order by average desc
+
+select * from mytable4
+
+ALTER TABLE mytable4
+(ADD COLUMN Passing_status VARCHAR(15) AFTER average);
+
+insert into mytable4 (Passing_status) values (if average >75, 'Passing' else 'Failing');
+
+
+select First_Name,average,if(average > 75,"PASS","FAIL") AS Status  from mytable4;
+       
+      
